@@ -1,0 +1,157 @@
+ Nozzle Design
+
+Spray Pattern: 270-degree arc for uniform coverage.
+
+Spray Mechanism: Multiple evenly spaced orifices with slightly larger ones at the edges to focus on edge cleaning.
+
+Adjustability:
+
+Adjustable spray intensity.
+
+Pivoting mechanism to control spray angles.
+
+Material: Brass (corrosion-resistant).
+
+Self-Cleaning Feature: Internal jet to flush the nozzle after operation, preventing clogging from cleaning agents.
+
+Optimal Distance: 10–15 cm from the object during operation.
+
+2. Tank System
+
+Capacity: 10 liters.
+
+Material: High-density polyethylene (HDPE) for durability and resistance to cleaning agents.
+
+Features:
+
+Level indicator for monitoring solution levels.
+
+Stirring mechanism to maintain uniform mixing of water and cleaning agent.
+
+Base: Compact footprint (30 cm x 30 cm).
+
+3. Power System
+
+Type: Battery-powered pump.
+
+Battery:
+
+12V rechargeable lithium-ion.
+
+Runtime: 1.5–2 hours per charge at full load.
+
+LED indicators for battery level and charging status.
+
+4. Automation and Control
+
+Operation:
+
+Automatic spray control with a built-in timer.
+
+Sensor-based adjustment for semi-circular object curvature (optional).
+
+Rotating Mechanism: Optional integration for dynamic cleaning.
+
+5. Safety Features
+
+Pressure relief valve to prevent over-pressurization.
+
+Anti-slip base for stability during operation.
+
+Size and Dimensions
+
+Nozzle Head:
+
+Diameter: 30 cm.
+
+Height: 15 cm.
+
+Tank Dimensions:
+
+Height: 40 cm.
+
+Base Diameter: 30 cm.
+
+Components:
+___________
+
+Water Tank: A small, portable tank to store water.
+Low-Voltage DC Pump: A small, low-voltage DC pump to increase water pressure.
+Ultrasonic Mist Nozzles: Multiple ultrasonic mist nozzles to produce a fine mist:Rain Bird R-VAN14
+Microcontroller: To control the pump, nozzles, and timing.
+Battery: A rechargeable battery to power the system.
+Frame: A simple frame to hold the components.
+Design:
+
+Nozzle Placement:
+
+Circular Arrangement: Place the nozzles equidistantly around the circumference of the cylinder.
+Nozzle Angle: Adjust the nozzle angle to ensure the mist reaches the center of the cylinder.
+Water Flow Rate:
+
+The microcontroller will control the pump's speed to regulate the water flow rate.
+Water Pressure:
+
+The pump will increase the water pressure to ensure the mist is dispersed effectively.
+Automation:
+
+Microcontroller: The microcontroller will control the pump's operation, the duration of the spray, and the rotation of the nozzles (if implemented).
+Timer: Set a timer to control the duration of the spray cycle.
+Sensor (Optional): A humidity sensor can be used to trigger the system when the humidity inside the cylinder drops below a certain threshold.
+
+Component Selection: Choose specific components based on your budget, performance requirements, and availability.
+Circuit Design: Design a circuit to power the pump, microcontroller, and nozzles.
+Programming: Write code for the microcontroller to control the system's operation.
+Assembly: Assemble the components onto the frame.
+Testing: Test the system to ensure it works as expected.
+
+
+Sample code
+
+
+#include <Wire.h>
+#include <RTClib.h> // Include if using RTC
+
+// Pin definitions
+const int pumpPin = 7; // Relay pin for the pump
+const int nozzlePin = 8; // Relay pin for the nozzle (if applicable)
+
+// Timing variables
+unsigned long sprayDuration = 10000; // Spray for 10 seconds
+unsigned long interval = 60000; // Spray every 60 seconds
+
+// RTC setup (if using)
+RTC_DS3231 rtc;
+
+void setup() {
+  pinMode(pumpPin, OUTPUT);
+  pinMode(nozzlePin, OUTPUT);
+  digitalWrite(pumpPin, LOW); // Ensure pump is off
+  digitalWrite(nozzlePin, LOW); // Ensure nozzle is off
+
+  // Initialize RTC (if using)
+  if (!rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
+}
+
+void loop() {
+  // Example timing logic
+  static unsigned long lastSprayTime = 0;
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - lastSprayTime >= interval) {
+    lastSprayTime = currentMillis;
+
+    // Activate pump and nozzle
+    digitalWrite(pumpPin, HIGH);
+    digitalWrite(nozzlePin, HIGH);
+    delay(sprayDuration); // Spray for the defined duration
+    digitalWrite(pumpPin, LOW);
+    digitalWrite(nozzlePin, LOW);
+  }
+
+  // Additional logic can be added here (e.g., sensor readings)
+}
+
